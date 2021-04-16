@@ -97,8 +97,8 @@ def main():
                     p1.slow = False
 
         if 0 <= phase_counter < 120:
-            movement.FrameMove(e1.pos, vec(WIDTH / 4, HEIGHT / 4))
-            movement.FrameMove(e2.pos, vec(WIDTH - (WIDTH / 4), HEIGHT / 4))
+            movement.FrameMove(e1.pos, vec(WIDTH / 4, HEIGHT / 4), 1)
+            movement.FrameMove(e2.pos, vec(WIDTH - (WIDTH / 4), HEIGHT / 4), 1)
 
         if 120 <= phase_counter:
             if phase_counter % 60 == 0:
@@ -127,6 +127,17 @@ def main():
             p1_ex_hit = pygame.sprite.collide_mask(p1, enemy)
             if p1_ex_hit and p1.spawn_timer == 0:
                 p1.death = True
+            p1_pb1_hit = pygame.sprite.spritecollide(enemy, player_bullets, True)
+            if p1_pb1_hit:
+                enemy.health -= 10
+                if enemy.health < 0:
+                    enemy.kill()
+            p1_pb2_hit = pygame.sprite.spritecollide(enemy, player_beam, True)
+            if p1_pb2_hit:
+                enemy.health -= 1
+                if enemy.health < 0:
+                    enemy.kill()
+
 
         if p1.death:
             p1.kill()
