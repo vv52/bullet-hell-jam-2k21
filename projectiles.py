@@ -7,13 +7,13 @@ rand = Random()
 
 
 class Bullet(pygame.sprite.Sprite):
-    def __init__(self, img, col_img, pos, angle, mult, jit):
+    def __init__(self, img, col_img, pos, angle, speed, jit):
         super().__init__()
         self.image = pygame.image.load(img)
         self.mask = pygame.mask.from_surface(pygame.image.load(col_img))
         self.rect = self.image.get_rect()
         self.rect.center = [pos.x, pos.y]
-        self.vel = vec(1, 0).rotate(angle) * mult
+        self.vel = vec(1, 0).rotate(angle) * speed
         self.pos = vec(self.rect.center)
         self.jit = jit
 

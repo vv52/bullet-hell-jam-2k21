@@ -8,8 +8,8 @@ HEIGHT = 240
 
 FPS = 60
 
-FAST = 2.6
-SLOW = 1.3
+FAST = 2.4
+SLOW = 1.2
 
 vec = pygame.math.Vector2
 
@@ -33,6 +33,7 @@ class Player(sprite.Sprite):
         self.clears = 2
         self.spawn_timer = 120
         self.shot_timer = 10
+        self.death = False
 
     def update(self):
         if self.spawn_timer > 0:
@@ -70,3 +71,10 @@ class Player(sprite.Sprite):
             self.pos.y = 4
 
         self.rect.center = self.pos
+
+
+class Circle(sprite.Sprite):
+    def __init__(self, spawn_x, spawn_y):
+        super().__init__("data/img/inv.png", spawn_x, spawn_y)
+        self.rect = self.image.get_rect()
+        self.pos = vec(self.rect.center)
