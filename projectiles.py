@@ -24,7 +24,40 @@ class Bullet(pygame.sprite.Sprite):
         else:
             offset = 0
         self.pos += self.vel + offset
-        self.pos += self.vel
+        self.rect.center = self.pos
+
+    def draw(self, screen):
+        screen.blit(self.image, self.rect)
+
+
+class PlayerBullet(pygame.sprite.Sprite):
+    def __init__(self, pos):
+        super().__init__()
+        self.image = pygame.image.load("data/img/player_bullet.png")
+        self.rect = self.image.get_rect()
+        self.rect.center = [pos.x, pos.y]
+        self.pos = vec(self.rect.center)
+        self.speed = vec(0, 3)
+
+    def update(self):
+        self.pos -= self.speed
+        self.rect.center = self.pos
+
+    def draw(self, screen):
+        screen.blit(self.image, self.rect)
+
+
+class PlayerBeam(pygame.sprite.Sprite):
+    def __init__(self, pos):
+        super().__init__()
+        self.image = pygame.image.load("data/img/player_beam.png")
+        self.rect = self.image.get_rect()
+        self.rect.center = [pos.x, pos.y]
+        self.pos = vec(self.rect.center)
+        self.speed = vec(0, 5)
+
+    def update(self):
+        self.pos -= self.speed
         self.rect.center = self.pos
 
     def draw(self, screen):
