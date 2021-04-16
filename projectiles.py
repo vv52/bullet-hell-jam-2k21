@@ -7,13 +7,13 @@ rand = Random()
 
 
 class Bullet(pygame.sprite.Sprite):
-    def __init__(self, img, col_img, pos, angle, jit):
+    def __init__(self, img, col_img, pos, angle, mult, jit):
         super().__init__()
         self.image = pygame.image.load(img)
         self.mask = pygame.mask.from_surface(pygame.image.load(col_img))
         self.rect = self.image.get_rect()
         self.rect.center = [pos.x, pos.y]
-        self.vel = vec(1, 0).rotate(angle) * 2
+        self.vel = vec(1, 0).rotate(angle) * mult
         self.pos = vec(self.rect.center)
         self.jit = jit
 
@@ -37,7 +37,7 @@ class PlayerBullet(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.rect.center = [pos.x, pos.y]
         self.pos = vec(self.rect.center)
-        self.speed = vec(0, 3)
+        self.speed = vec(0, 4)
 
     def update(self):
         self.pos -= self.speed

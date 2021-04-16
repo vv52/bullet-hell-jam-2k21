@@ -8,8 +8,8 @@ HEIGHT = 240
 
 FPS = 60
 
-FAST = 2.4
-SLOW = 1.2
+FAST = 2.6
+SLOW = 1.3
 
 vec = pygame.math.Vector2
 
@@ -29,7 +29,7 @@ class Player(sprite.Sprite):
         self.firing = False
         self.beam = False
         self.grazing = False
-        self.firing_helper = False
+        self.fire_helper = False
         self.clears = 2
         self.spawn_timer = 120
         self.shot_timer = 10
