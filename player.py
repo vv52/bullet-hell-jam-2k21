@@ -34,6 +34,7 @@ class Player(sprite.Sprite):
         self.spawn_timer = 120
         self.shot_timer = 10
         self.death = False
+        self.close = False
 
     def update(self):
         if self.spawn_timer > 0:
@@ -76,5 +77,12 @@ class Player(sprite.Sprite):
 class Circle(sprite.Sprite):
     def __init__(self, spawn_x, spawn_y):
         super().__init__("data/img/inv.png", spawn_x, spawn_y)
+        self.rect = self.image.get_rect()
+        self.pos = vec(self.rect.center)
+
+
+class PBCircle(sprite.Sprite):
+    def __init__(self, spawn_x, spawn_y):
+        super().__init__("data/img/point_blank.png", spawn_x, spawn_y)
         self.rect = self.image.get_rect()
         self.pos = vec(self.rect.center)

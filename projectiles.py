@@ -23,7 +23,7 @@ class Bullet(pygame.sprite.Sprite):
                          (rand.randint(0, self.jit) - (self.jit / 2)))
         else:
             offset = 0
-        self.pos += self.vel + offset
+        self.pos += self.vel + vec(offset, offset)
         self.rect.center = self.pos
 
     def draw(self, screen):
