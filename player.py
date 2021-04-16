@@ -29,6 +29,7 @@ class Player(sprite.Sprite):
         self.firing = False
         self.beam = False
         self.grazing = False
+        self.firing_helper = False
         self.clears = 2
         self.spawn_timer = 120
         self.shot_timer = 10

@@ -43,8 +43,11 @@ def main():
                 if event.key == pygame.K_RIGHT:
                     p1.right = True
                 if event.key == pygame.K_z:
-                    p1.firing = True
+                    p1.fire_helper = True
+                    if not p1.beam:
+                        p1.firing = True
                 if event.key == pygame.K_x:
+                    p1.firing = False
                     p1.beam = True
                     p1.slow = True
             if event.type == pygame.KEYUP:
@@ -57,8 +60,11 @@ def main():
                 if event.key == pygame.K_RIGHT:
                     p1.right = False
                 if event.key == pygame.K_z:
+                    p1.fire_helper = False
                     p1.firing = False
                 if event.key == pygame.K_x:
+                    if p1.fire_helper == True:
+                        p1.firing = True
                     p1.beam = False
                     p1.slow = False
 
