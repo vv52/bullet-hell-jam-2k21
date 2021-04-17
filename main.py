@@ -48,20 +48,33 @@ def main():
 
     e1 = ex.EnemyA(WIDTH / 2, -10)
     e2 = ex.EnemyA(WIDTH / 2, -10)
-    e3 = ex.EnemyB(WIDTH / 2, -10)
+    e3 = ex.EnemyB(WIDTH / 2, -18)
+    e4 = ex.EnemyB(WIDTH / 6, -18)
+    e4.health = 400
+    e5 = ex.EnemyB(WIDTH - (WIDTH / 6), -18)
+    e5.health = 400
     exA.add(e1)
     exA.add(e2)
     exB.add(e3)
+    exB.add(e4)
+    exB.add(e5)
     enemies.add(e1)
     enemies.add(e2)
-    enemies.add(e3)
     sprites.add(e1)
     sprites.add(e2)
     sprites.add(e3)
+    sprites.add(e4)
+    sprites.add(e5)
 
     bg_offset = 0
-
     phase_counter = 0
+
+    waiting = True
+    while waiting:
+        for event in pygame.event.get():
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_RETURN:
+                    waiting = False
 
     running = True
     while running:
@@ -110,7 +123,9 @@ def main():
         if 0 <= phase_counter < 100:
             movement.FrameMove(e1.pos, vec(WIDTH / 4, HEIGHT / 4), 1)
             movement.FrameMove(e2.pos, vec(WIDTH - (WIDTH / 4), HEIGHT / 4), 1)
-
+        if phase_counter == 100:
+            e1.screen = True                    # MAKE THIS NOT MANUAL PLEASE
+            e2.screen = True                    # MAKE THIS NOT MANUAL PLEASE
         if 100 <= phase_counter < 560:
             if phase_counter % 60 == 0:
                 for enemy in exA:
@@ -118,6 +133,8 @@ def main():
                                           1.5, 1, 8, rand.randint(0, 89) - 45, enemy_bullets, bullets, sprites)
             movement.FrameMove(e1.pos, p1.pos, 0.1)
             movement.FrameMove(e2.pos, p1.pos, 0.1)
+        if phase_counter == 560:
+            enemies.add(e3)
         if 560 <= phase_counter < 780:
             if phase_counter % 30 == 0:
                 for enemy in exA:
@@ -126,16 +143,52 @@ def main():
             movement.FrameMove(e1.pos, vec(-20, e1.pos.y), 0.4)
             movement.FrameMove(e2.pos, vec(WIDTH + 20, e2.pos.y), 0.4)
             movement.FrameMove(e3.pos, vec(WIDTH / 2, HEIGHT / 3), 0.4)
+            if not enemies:
+                phase_counter = 780
+        if phase_counter == 780:
+            e3.screen = True                    # MAKE THIS NOT MANUAL PLEASE
         if 780 <= phase_counter < 1380:
-            if phase_counter % 5 == 0:
+            if phase_counter % 10 == 0:
                 for enemy in exB:
                     attacks.CircleSpawner("data/img/bullet_a.png", "data/img/bullet_collide.png", enemy.pos,
                                           1, 0, 5, phase_counter % 360, enemy_bullets, bullets, sprites)
+            movement.FrameMove(e1.pos, vec(-20, e1.pos.y), 0.4)
+            movement.FrameMove(e2.pos, vec(WIDTH + 20, e2.pos.y), 0.4)
+            if not enemies:
+                phase_counter = 1380
         if 1380 <= phase_counter < 1620:
-            if phase_counter % 30 == 0 and len(exB) > 0:
-                attacks.CircleSpawner("data/img/bullet_a.png", "data/img/bullet_collide.png", e3.pos,
-                                      1.5, 1, 8, rand.randint(0, 89) - 45, enemy_bullets, bullets, sprites)
-            movement.FrameMove(e3.pos, vec(WIDTH / 2, HEIGHT + 20), 1)
+            if phase_counter % 30 == 0:
+                for enemy in exB:
+                    attacks.CircleSpawner("data/img/bullet_a.png", "data/img/bullet_collide.png", enemy.pos,
+                                          1.5, 1, 8, rand.randint(0, 89) - 45, enemy_bullets, bullets, sprites)
+                movement.FrameMove(e3.pos, vec(WIDTH / 2, HEIGHT + 20), 1)
+            if not enemies:
+                phase_counter = 1620
+        if phase_counter == 1620:
+            enemies.add(e4)
+            enemies.add(e5)
+        if 1620 <= phase_counter < 1740:
+            movement.FrameMove(e4.pos, vec(WIDTH / 6, HEIGHT / 6), 0.4)
+            movement.FrameMove(e5.pos, vec(WIDTH - (WIDTH / 6), HEIGHT / 6), 0.4)
+        if phase_counter == 1740:
+            e4.screen = True                    # MAKE THIS NOT MANUAL PLEASE
+            e5.screen = True                    # MAKE THIS NOT MANUAL PLEASE
+        if 1740 <= phase_counter < 2440:
+            if phase_counter % 15 == 0:
+                for enemy in exB:
+                    attacks.CircleSpawner("data/img/bullet_a.png", "data/img/bullet_collide.png", enemy.pos,
+                                          1, 0, 5, phase_counter % 360, enemy_bullets, bullets, sprites)
+            if not enemies:
+                phase_counter = 2440
+        if 2440 <= phase_counter < 2600:
+            if phase_counter % 30 == 0:
+                for enemy in exB:
+                    attacks.CircleSpawner("data/img/bullet_a.png", "data/img/bullet_collide.png", enemy.pos,
+                                          1.5, 1, 8, rand.randint(0, 89) - 45, enemy_bullets, bullets, sprites)
+            movement.FrameMove(e4.pos, vec(-20, e1.pos.y), 0.4)
+            movement.FrameMove(e5.pos, vec(WIDTH + 20, e2.pos.y), 0.4)
+            if not enemies:
+                phase_counter = 2600
 
     # STAGE END
 
@@ -160,7 +213,14 @@ def main():
             if p1_hit and p1.spawn_timer == 0:
                 p1.death = True
 
-    # HANDLE ENEMY DAMAGE AND PROXIMITY CALCULATION
+    # PROXIMITY CALCULATION
+
+        p1.close = False
+        for enemy in enemies:
+            if -50 <= math.hypot(enemy.pos.x - p1.pos.x, enemy.pos.y - p1.pos.y) <= 50:
+                p1.close = True
+
+    # HANDLE ENEMY DAMAGE AND PLAYER COLLISION
 
         for enemy in enemies:
             p1_ex_hit = pygame.sprite.collide_mask(p1, enemy)
@@ -168,26 +228,20 @@ def main():
                 p1.death = True
             p1_pb1_hit = pygame.sprite.spritecollide(enemy, player_bullets, True)
             if p1_pb1_hit:
-                if -50 <= math.hypot(e1.pos.x - p1.pos.x, e1.pos.y - p1.pos.y) <= 50:
+                if p1.close:
                     enemy.health -= 20
-                    p1.close = True
                 else:
                     enemy.health -= 10
-                    p1.close = False
                 if enemy.health < 0:
                     enemy.kill()
             p1_pb2_hit = pygame.sprite.spritecollide(enemy, player_beam, True)
             if p1_pb2_hit:
-                if -50 <= math.hypot(e1.pos.x - p1.pos.x, e1.pos.y - p1.pos.y) <= 50:
+                if p1.close:
                     enemy.health -= 2
-                    p1.close = True
                 else:
                     enemy.health -= 1
-                    p1.close = False
                 if enemy.health < 0:
                     enemy.kill()
-            #if enemy.rect.center[1] > (HEIGHT / 3) * 2:
-            #    enemy.pos = vec(enemy.pos.x, (HEIGHT / 3) * 2)
 
     # HANDLE PLAYER DEATH
 
@@ -208,6 +262,19 @@ def main():
                 bullet.kill()
             elif bullet.rect.center[1] < -4:
                 bullet.kill()
+
+    # DESPAWN ENEMIES ONCE THEY'VE LEFT THE SCREEN
+
+        for enemy in enemies:
+            if enemy.screen:
+                if enemy.rect.center[0] < -(enemy.image.get_width() / 2):
+                    enemy.kill()
+                elif enemy.rect.center[0] > WIDTH + (enemy.image.get_width() / 2):
+                    enemy.kill()
+                elif enemy.rect.center[1] > HEIGHT + (enemy.image.get_height() / 2):
+                    enemy.kill()
+                elif enemy.rect.center[1] < -(enemy.image.get_height() / 2):
+                    enemy.kill()
 
     # RENDER INFINITE BACKGROUND SCROLL
 
