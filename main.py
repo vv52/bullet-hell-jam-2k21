@@ -123,9 +123,6 @@ def main():
         if 0 <= phase_counter < 100:
             movement.FrameMove(e1.pos, vec(WIDTH / 4, HEIGHT / 4), 1)
             movement.FrameMove(e2.pos, vec(WIDTH - (WIDTH / 4), HEIGHT / 4), 1)
-        if phase_counter == 100:
-            e1.screen = True                    # MAKE THIS NOT MANUAL PLEASE
-            e2.screen = True                    # MAKE THIS NOT MANUAL PLEASE
         if 100 <= phase_counter < 560:
             if phase_counter % 60 == 0:
                 for enemy in exA:
@@ -145,8 +142,6 @@ def main():
             movement.FrameMove(e3.pos, vec(WIDTH / 2, HEIGHT / 3), 0.4)
             if not enemies:
                 phase_counter = 780
-        if phase_counter == 780:
-            e3.screen = True                    # MAKE THIS NOT MANUAL PLEASE
         if 780 <= phase_counter < 1380:
             if phase_counter % 10 == 0:
                 for enemy in exB:
@@ -170,9 +165,6 @@ def main():
         if 1620 <= phase_counter < 1740:
             movement.FrameMove(e4.pos, vec(WIDTH / 6, HEIGHT / 6), 0.4)
             movement.FrameMove(e5.pos, vec(WIDTH - (WIDTH / 6), HEIGHT / 6), 0.4)
-        if phase_counter == 1740:
-            e4.screen = True                    # MAKE THIS NOT MANUAL PLEASE
-            e5.screen = True                    # MAKE THIS NOT MANUAL PLEASE
         if 1740 <= phase_counter < 2440:
             if phase_counter % 15 == 0:
                 for enemy in exB:

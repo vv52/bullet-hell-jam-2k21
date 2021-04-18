@@ -14,15 +14,29 @@ SLOW = 1.3
 vec = pygame.math.Vector2
 
 
-class EnemyA(sprite.Sprite):
-    def __init__(self, spawn_x, spawn_y):
-        super().__init__("data/img/enemy_a_0.png", spawn_x, spawn_y)
+class Enemy(sprite.Sprite):
+    def __init__(self, image, spawn_x, spawn_y):
+        super().__init__(image, spawn_x, spawn_y)
         self.mask = pygame.mask.from_surface(self.image)
         self.pos = vec(self.rect.center)
         self.timer = 0
         self.frame = 0
         self.health = 200
         self.screen = False
+        self.screen_toggle = 180
+
+    def upkeep(self):
+        if self.timer == 60:
+            self.timer = 0
+        self.timer += 1
+        self.rect.center = self.pos
+        if self.timer >= self.screen_toggle:
+            self.screen = True
+
+
+class EnemyA(Enemy):
+    def __init__(self, spawn_x, spawn_y):
+        super().__init__("data/img/enemy_a_0.png", spawn_x, spawn_y)
 
     def update(self):
         if self.timer % 15 == 0:
@@ -31,21 +45,13 @@ class EnemyA(sprite.Sprite):
             else:
                 self.frame = 0
             self.image = pygame.image.load(f"data/img/enemy_a_{self.frame}.png")
-        if self.timer == 60:
-            self.timer = 0
-        self.timer += 1
-        self.rect.center = self.pos
+        self.upkeep()
 
 
-class EnemyB(sprite.Sprite):
+class EnemyB(Enemy):
     def __init__(self, spawn_x, spawn_y):
         super().__init__("data/img/enemy_b_0.png", spawn_x, spawn_y)
-        self.mask = pygame.mask.from_surface(self.image)
-        self.pos = vec(self.rect.center)
-        self.timer = 0
-        self.frame = 0
         self.health = 600
-        self.screen = False
 
     def update(self):
         if self.timer % 5 == 0:
@@ -54,7 +60,4 @@ class EnemyB(sprite.Sprite):
             else:
                 self.frame = 0
             self.image = pygame.image.load(f"data/img/enemy_b_{self.frame}.png")
-        if self.timer == 60:
-            self.timer = 0
-        self.timer += 1
-        self.rect.center = self.pos
+        self.upkeep()
